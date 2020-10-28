@@ -58,7 +58,7 @@ FORMAT = ihex
 
 
 # Target file name (without extension).
-TARGET = Tiny_ws2812
+TARGET = Tiny_NEO_pixel_ring
 
 
 # Object files directory

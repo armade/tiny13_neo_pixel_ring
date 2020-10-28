@@ -114,26 +114,64 @@ static inline void Init_wakeup_timer(void)
 
 int main(void)
 {
-	//struct pixel p;
+	struct pixel p;
 	static char cou = 0;
+	static char index = 0;
 	uint8_t i;
+	uint8_t j;
+	uint16_t bright;
+	
 	
 	Init_wakeup_timer();
 	sei();
 
 	/* loop */
 	while (1) {
-		
-		for (i = 0; i < NR_OF_LEDS; i++) {
+		/////////////////////////////////////////////////////////////
+		// R A I N B O W
+		/////////////////////////////////////////////////////////////
+		/*for (i = 0; i < NR_OF_LEDS; i++) {
 			color_wheel(
 				(((i * 256) / NR_OF_LEDS) + cou) & 0xff,
 				&pixels[i]);
 			Neo_Pixel_Ring_set(&pixels[i],0,255);
 		}
 		cou++;
-		delay = 5;
-		//color_wheel(cou++,&pixels[0]);
+		delay = 5;*/
+		
+		/////////////////////////////////////////////////////////////
+		// S C A N N E R
+		/////////////////////////////////////////////////////////////
+
+		j = index;
+		for (i = 0; i < (NR_OF_LEDS-1); i++) {
+			color_wheel(cou,&pixels[j]);
+			bright = i*42;
+			if(bright>255)
+				bright = 0;
+
+			Neo_Pixel_Ring_set(&pixels[j],0,bright);
+
+			if(++j>(NR_OF_LEDS-1))
+				j=0;
+		}
+	
+		if(++index>(NR_OF_LEDS-1))
+			index=0;
+		cou++;
+		delay = 85;
+		
+		
+		/////////////////////////////////////////////////////////////
+		// F I R E
+		/////////////////////////////////////////////////////////////
 		//RGB_fire_run(&pixels[0],&p);
+		
+		
+		
+		/////////////////////////////////////////////////////////////
+		// U P D A T E
+		/////////////////////////////////////////////////////////////
 		ws2812_setleds((struct cRGB *)pixels, NR_OF_LEDS);
 		
 		TCCR0B = (1 << CS02); // timer prescaler == 256
